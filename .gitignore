@@ -1,0 +1,6 @@
+api/.env
+console/.env
+*.sqlite
+rag/knowledge_base/.chroma/
+classifier/*.pkl
+__pycache__/

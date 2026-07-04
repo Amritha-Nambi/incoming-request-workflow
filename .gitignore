@@ -4,3 +4,4 @@ console/.env
 rag/knowledge_base/.chroma/
 classifier/*.pkl
 __pycache__/
+.venv/

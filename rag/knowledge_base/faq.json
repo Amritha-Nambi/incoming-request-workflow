@@ -1,0 +1,177 @@
+[
+  {
+    "id": "plans-01",
+    "topic": "Prepaid plan tiers",
+    "content": "Orbit Mobile offers three prepaid plans: Orbit Lite (2GB/day, unlimited calls and 100 SMS/day, 28-day validity, Rs.239), Orbit Plus (3GB/day, unlimited calls and SMS, 28-day validity, Rs.399), and Orbit Max (5GB/day, unlimited calls and SMS, OTT bundle included, 28-day validity, Rs.599)."
+  },
+  {
+    "id": "plans-02",
+    "topic": "Postpaid plan tiers",
+    "content": "Orbit Mobile postpaid plans are billed monthly: Orbit Postpaid Basic (40GB/month, unlimited calls and SMS, Rs.399/month) and Orbit Postpaid Pro (75GB/month, unlimited calls and SMS, international roaming pack included, Rs.799/month)."
+  },
+  {
+    "id": "plans-03",
+    "topic": "Family / multi-line plans",
+    "content": "Orbit Family Plan lets up to 4 lines share a single postpaid account with a combined 150GB monthly data pool. The primary account holder receives one consolidated bill, and each additional line costs Rs.199/month."
+  },
+  {
+    "id": "plans-04",
+    "topic": "5G availability",
+    "content": "5G is available on Orbit Plus, Orbit Max, and both postpaid plans at no extra cost, provided the subscriber has a 5G-compatible device. 5G is currently live in 42 cities, with rollout to additional cities ongoing."
+  },
+  {
+    "id": "plans-05",
+    "topic": "Unused data rollover",
+    "content": "Unused daily data does not carry over to the next day on prepaid plans. On postpaid plans, up to 10GB of unused monthly data rolls over to the following billing cycle, capped at one month of rollover."
+  },
+  {
+    "id": "billing-01",
+    "topic": "Billing cycle",
+    "content": "Postpaid billing cycles run for 30 days from the date of activation or the last plan renewal, not on a fixed calendar date. Subscribers can check their exact billing cycle dates in the Orbit Mobile app under Account > Billing."
+  },
+  {
+    "id": "billing-02",
+    "topic": "Payment methods",
+    "content": "Bills can be paid via UPI, debit/credit card, net banking, or auto-pay through the Orbit Mobile app or website. Auto-pay enrollment gives a 2% bill discount each cycle."
+  },
+  {
+    "id": "billing-03",
+    "topic": "Late payment fee",
+    "content": "Postpaid bills are due within 15 days of generation. Payments made after the due date incur a late fee of Rs.50 plus 1.5% monthly interest on the outstanding balance, and service may be suspended after 25 days of non-payment."
+  },
+  {
+    "id": "billing-04",
+    "topic": "Data overage charges",
+    "content": "If a postpaid subscriber exceeds their monthly data allowance, additional data is charged at Rs.0.50/MB unless an overage protection add-on (Rs.99/month, caps overage billing at Rs.299) has been activated."
+  },
+  {
+    "id": "billing-05",
+    "topic": "Refund policy",
+    "content": "Refunds for duplicate payments, failed plan activations, or billing errors are processed within 7 business days to the original payment method. Refund requests can be raised via the app or by contacting support."
+  },
+  {
+    "id": "sim-01",
+    "topic": "SIM replacement process",
+    "content": "A lost or damaged SIM can be replaced by visiting an Orbit Mobile store with a valid ID, or by requesting a replacement through the app, which ships a new SIM within 2-3 business days. A replacement fee of Rs.50 applies, and the existing number and plan carry over automatically."
+  },
+  {
+    "id": "sim-02",
+    "topic": "eSIM availability",
+    "content": "Orbit Mobile supports eSIM on all postpaid plans and Orbit Max prepaid. eSIM activation is instant via QR code and does not require a physical SIM replacement fee."
+  },
+  {
+    "id": "sim-03",
+    "topic": "Porting into Orbit Mobile",
+    "content": "To port an existing number to Orbit Mobile, subscribers must first generate a Unique Porting Code (UPC) by sending an SMS to 1900 from their current number, then submit the UPC along with ID proof at an Orbit Mobile store or through the app. Porting typically completes within 3-5 business days."
+  },
+  {
+    "id": "sim-04",
+    "topic": "Porting out of Orbit Mobile",
+    "content": "Subscribers porting their number out to another operator must generate a UPC by texting PORT to 1900, and should ensure their account has no outstanding dues, as unpaid balances can delay or block the port request."
+  },
+  {
+    "id": "network-01",
+    "topic": "Coverage map",
+    "content": "Orbit Mobile's live coverage map is available in the app under Network > Coverage, showing 2G/4G/5G availability by area. Coverage gaps can be reported directly from the map to help prioritize network upgrades."
+  },
+  {
+    "id": "network-02",
+    "topic": "Indoor signal issues",
+    "content": "Weak indoor signal is commonly caused by building materials blocking radio signals. Orbit Mobile offers a Wi-Fi Calling feature (enable under Settings > Network) that routes calls over Wi-Fi when cellular signal is weak, at no extra charge."
+  },
+  {
+    "id": "network-03",
+    "topic": "Planned vs unplanned outages",
+    "content": "Planned network maintenance is announced at least 24 hours in advance via SMS and the app. For unplanned outages affecting a wide area, Orbit Mobile posts live status updates on the app's Network Status page and credits affected postpaid accounts on a pro-rated basis for confirmed multi-hour outages."
+  },
+  {
+    "id": "network-04",
+    "topic": "Outage compensation policy",
+    "content": "For any confirmed outage lasting more than 3 continuous hours affecting a subscriber's registered location, Orbit Mobile automatically credits one day's pro-rated plan value to the account within 5 business days; no claim form is required."
+  },
+  {
+    "id": "roaming-01",
+    "topic": "International roaming packs",
+    "content": "International roaming packs start at Rs.499 for 1GB data + 100 minutes valid for 7 days, covering over 80 countries. Roaming packs must be activated at least 2 hours before departure via the app under Add-ons > Roaming."
+  },
+  {
+    "id": "roaming-02",
+    "topic": "Roaming without a pack",
+    "content": "Using data or calls abroad without an active roaming pack is billed at standard international rates, which can be significantly higher than pack rates. Orbit Mobile sends an SMS warning when a subscriber's device connects to a foreign network without an active pack."
+  },
+  {
+    "id": "roaming-03",
+    "topic": "Postpaid Pro included roaming",
+    "content": "Orbit Postpaid Pro subscribers receive one complimentary 1GB/7-day international roaming pack per billing cycle, automatically applied when the device is first detected on a foreign network."
+  },
+  {
+    "id": "addon-01",
+    "topic": "Data booster add-ons",
+    "content": "Subscribers who run out of daily data can purchase a data booster: 1GB for Rs.19, 3GB for Rs.49, or 6GB for Rs.89, valid until the end of the current plan cycle."
+  },
+  {
+    "id": "addon-02",
+    "topic": "OTT subscription bundles",
+    "content": "Orbit Max and Orbit Postpaid Pro include a complimentary OTT bundle (one streaming service, rotated quarterly). Other plans can add an OTT bundle for Rs.99/month via the app's Add-ons section."
+  },
+  {
+    "id": "addon-03",
+    "topic": "International calling packs",
+    "content": "For frequent international calls without roaming, an ISD calling pack (100 minutes to 50+ countries for Rs.149/month) can be added under Add-ons > ISD Packs."
+  },
+  {
+    "id": "account-01",
+    "topic": "KYC and address update",
+    "content": "KYC details and registered address can be updated through the app under Account > Profile, or at any Orbit Mobile store with valid ID and address proof. Updates typically reflect within 24-48 hours."
+  },
+  {
+    "id": "account-02",
+    "topic": "Adding a line to a family plan",
+    "content": "Additional lines can be added to a Family Plan through the app under Account > Family Plan > Add Line, subject to a maximum of 4 lines per plan and standard KYC verification for the new line."
+  },
+  {
+    "id": "account-03",
+    "topic": "Plan upgrade or downgrade",
+    "content": "Subscribers can change plans anytime via the app under Account > Change Plan. Upgrades take effect immediately with a pro-rated charge for the remaining cycle; downgrades take effect at the start of the next billing cycle."
+  },
+  {
+    "id": "trouble-01",
+    "topic": "Slow data speeds troubleshooting",
+    "content": "Slow data speeds are commonly resolved by toggling Airplane Mode for 10 seconds, checking that the correct APN settings (available under Settings > Network > APN in the Orbit Mobile app) are configured, or restarting the device. Persistent slowness in a fixed location may indicate local network congestion."
+  },
+  {
+    "id": "trouble-02",
+    "topic": "Dropped calls troubleshooting",
+    "content": "Frequent dropped calls are often linked to weak signal areas, an outdated device software version, or a damaged SIM. Enabling Wi-Fi Calling, updating device software, and requesting a SIM replacement (if the SIM is more than 3 years old) commonly resolve the issue."
+  },
+  {
+    "id": "trouble-03",
+    "topic": "Device compatibility",
+    "content": "Most unlocked 4G/5G smartphones are compatible with Orbit Mobile. Subscribers can verify device compatibility, including 5G and VoLTE support, under Settings > Device Check in the app before switching devices."
+  },
+  {
+    "id": "trouble-04",
+    "topic": "No signal or no service",
+    "content": "If a device shows no signal entirely, first confirm the account is active and not suspended for non-payment, then check the coverage map for known outages in the area, and finally try reseating the SIM or testing it in another compatible device to rule out a SIM fault."
+  },
+  {
+    "id": "support-01",
+    "topic": "Support channels",
+    "content": "Orbit Mobile support is available via in-app chat (24/7), phone support at 1800-123-4567 (7am-11pm daily), and in-person at any Orbit Mobile store during business hours."
+  },
+  {
+    "id": "support-02",
+    "topic": "Complaint escalation process",
+    "content": "Complaints raised via the app or call center receive an initial response within 2 hours and are expected to be resolved within 48 hours. Unresolved complaints are automatically escalated to a senior support handler after 48 hours."
+  },
+  {
+    "id": "support-03",
+    "topic": "Regulatory complaint process",
+    "content": "If a complaint remains unresolved after the internal escalation process, subscribers may file a formal complaint with the telecom regulatory authority (e.g. TRAI in India) or the applicable national consumer telecom ombudsman, typically after providing the operator a documented resolution window of 7-30 days depending on jurisdiction."
+  },
+  {
+    "id": "support-04",
+    "topic": "Account suspension and reactivation",
+    "content": "Accounts suspended for non-payment can be reactivated immediately upon clearing the outstanding balance through the app. Accounts suspended for longer than 90 days may require a new SIM and re-verification of KYC to reactivate."
+  }
+]

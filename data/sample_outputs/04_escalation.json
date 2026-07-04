@@ -1,0 +1,22 @@
+{
+    "id": "7D332B",
+    "received_at": "2026-07-04T11:05:45.368227",
+    "source": "shared_inbox",
+    "requester_email": "deepak.nair@example.com",
+    "type": "escalation",
+    "urgency": "critical",
+    "confidence": 1.0,
+    "summary": null,
+    "department": null,
+    "draft_response": "We have received your report regarding the total network outage and understand the severity of this situation. Our engineering team has been alerted to prioritize this disruption immediately. We are investigating the cause and will provide updates as soon as more information becomes available.",
+    "sources": null,
+    "actions_taken": [
+        "Flagged for immediate human attention",
+        "Supervisor notified",
+        "Draft acknowledgement generated"
+    ],
+    "needs_approval": true,
+    "approved": null,
+    "sla_deadline": null,
+    "status": "awaiting_approval"
+}

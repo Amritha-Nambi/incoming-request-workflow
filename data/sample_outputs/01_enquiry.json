@@ -1,0 +1,43 @@
+{
+    "id": "F3E76C",
+    "received_at": "2026-07-04T11:05:37.541541",
+    "source": "web_form",
+    "requester_email": "priya.sharma@example.com",
+    "type": "enquiry",
+    "urgency": "low",
+    "confidence": 1.0,
+    "summary": "Orbit Postpaid Pro plan details",
+    "department": null,
+    "draft_response": "The Orbit Postpaid Pro plan includes a monthly data allowance of 75GB. It also features a complimentary 1GB/7-day international roaming pack per billing cycle, which is automatically applied when you connect to a foreign network.",
+    "sources": [
+        {
+            "topic": "Postpaid plan tiers",
+            "content": "Orbit Mobile postpaid plans are billed monthly: Orbit Postpaid Basic (40GB/month, unlimited calls and SMS, Rs.399/month) and Orbit Postpaid Pro (75GB/month, unlimited calls and SMS, international roaming pack included, Rs.799/month)."
+        },
+        {
+            "topic": "Postpaid Pro included roaming",
+            "content": "Orbit Postpaid Pro subscribers receive one complimentary 1GB/7-day international roaming pack per billing cycle, automatically applied when the device is first detected on a foreign network."
+        },
+        {
+            "topic": "Family / multi-line plans",
+            "content": "Orbit Family Plan lets up to 4 lines share a single postpaid account with a combined 150GB monthly data pool. The primary account holder receives one consolidated bill, and each additional line costs Rs.199/month."
+        },
+        {
+            "topic": "Prepaid plan tiers",
+            "content": "Orbit Mobile offers three prepaid plans: Orbit Lite (2GB/day, unlimited calls and 100 SMS/day, 28-day validity, Rs.239), Orbit Plus (3GB/day, unlimited calls and SMS, 28-day validity, Rs.399), and Orbit Max (5GB/day, unlimited calls and SMS, OTT bundle included, 28-day validity, Rs.599)."
+        },
+        {
+            "topic": "Roaming without a pack",
+            "content": "Using data or calls abroad without an active roaming pack is billed at standard international rates, which can be significantly higher than pack rates. Orbit Mobile sends an SMS warning when a subscriber's device connects to a foreign network without an active pack."
+        }
+    ],
+    "actions_taken": [
+        "Classified sub-topic: Orbit Postpaid Pro plan details",
+        "AI response generated and sent",
+        "Logged as resolved"
+    ],
+    "needs_approval": false,
+    "approved": null,
+    "sla_deadline": null,
+    "status": "resolved"
+}

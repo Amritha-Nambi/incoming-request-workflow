@@ -1,0 +1,23 @@
+{
+    "id": "E8AF5E",
+    "received_at": "2026-07-04T11:05:40.822646",
+    "source": "email",
+    "requester_email": "arjun.mehta@example.com",
+    "type": "service_request",
+    "urgency": "medium",
+    "confidence": 1.0,
+    "summary": "The subscriber's SIM card is damaged and they are requesting a replacement while retaining their existing mobile number.",
+    "department": "SIM & Number Porting",
+    "draft_response": "I have routed your request to our SIM & Number Porting department, who will assist you with the replacement process.",
+    "sources": null,
+    "actions_taken": [
+        "Case summarized",
+        "Routed to SIM & Number Porting",
+        "Confirmation sent to requester",
+        "4h SLA timer set"
+    ],
+    "needs_approval": false,
+    "approved": null,
+    "sla_deadline": "2026-07-04T15:05:40.822526",
+    "status": "pending"
+}

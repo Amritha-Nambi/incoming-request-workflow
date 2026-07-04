@@ -1,0 +1,347 @@
+{
+  "name": "Incoming Request Workflow - Delivery",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "process-case",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-process-case",
+      "name": "Process Case",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        300
+      ],
+      "webhookId": "process-case"
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.body.type}}",
+                    "rightValue": "enquiry",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "enquiry"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.body.type}}",
+                    "rightValue": "service_request",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "service_request"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.body.type}}",
+                    "rightValue": "complaint",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "complaint"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.body.type}}",
+                    "rightValue": "escalation",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "outputKey": "escalation"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "switch-route-by-type",
+      "name": "Route By Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        360,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@example.com",
+        "toEmail": "={{$json.body.requester_email}}",
+        "subject": "Re: your enquiry",
+        "text": "={{$json.body.draft_response}}",
+        "options": {}
+      },
+      "id": "email-enquiry-response",
+      "name": "Send Enquiry Response",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        620,
+        60
+      ],
+      "credentials": {
+        "smtp": {
+          "name": "Mailtrap SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ \"channel\": ({\"Billing\":\"#billing-ops\",\"Technical Support\":\"#technical-support-ops\",\"SIM & Number Porting\":\"#sim-porting-ops\",\"Plan Changes\":\"#plan-changes-ops\",\"Network Operations\":\"#network-ops\"})[$json.body.department] || \"#technical-support-ops\", \"text\": \":inbox_tray: Service request routed to *\" + $json.body.department + \"*\\nCase: \" + $json.body.id + \" | Customer: \" + ($json.body.requester_email || \"not provided\") + ($json.body.sla_deadline ? (\"\\nSLA: \" + (new Date($json.body.sla_deadline + \"Z\")).toLocaleString(\"en-AU\", {timeZone: \"Australia/Brisbane\", dateStyle: \"medium\", timeStyle: \"short\"})) : \"\") + \"\\n> \" + $json.body.summary }) }}",
+        "options": {}
+      },
+      "id": "slack-service-request",
+      "name": "Slack: Service Request Routed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        220
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Slack Bot Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@example.com",
+        "toEmail": "={{$json.body.requester_email}}",
+        "subject": "Your service request has been received",
+        "text": "={{$json.body.draft_response}}",
+        "options": {}
+      },
+      "id": "email-service-request-confirmation",
+      "name": "Send Service Request Confirmation",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        860,
+        220
+      ],
+      "credentials": {
+        "smtp": {
+          "name": "Mailtrap SMTP"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ \"channel\": \"#complaints-queue\", \"text\": \":warning: Complaint escalated (urgency: \" + $json.body.urgency + \")\\nCase: \" + $json.body.id + \" | Customer: \" + ($json.body.requester_email || \"unknown requester\") + ($json.body.sla_deadline ? (\"\\nSLA: \" + (new Date($json.body.sla_deadline + \"Z\")).toLocaleString(\"en-AU\", {timeZone: \"Australia/Brisbane\", dateStyle: \"medium\", timeStyle: \"short\"})) : \"\") + \"\\n> \" + $json.body.request_text }) }}",
+        "options": {}
+      },
+      "id": "slack-complaint-escalation",
+      "name": "Slack: Complaint Escalated",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        380
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Slack Bot Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/chat.postMessage",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ \"channel\": \"#escalations-queue\", \"text\": \":rotating_light: CRITICAL escalation \\u2014 supervisor review needed\\nCase: \" + $json.body.id + \" | Customer: \" + ($json.body.requester_email || \"unknown requester\") + ($json.body.sla_deadline ? (\"\\nSLA: \" + (new Date($json.body.sla_deadline + \"Z\")).toLocaleString(\"en-AU\", {timeZone: \"Australia/Brisbane\", dateStyle: \"medium\", timeStyle: \"short\"})) : \"\") + \"\\n> \" + $json.body.request_text }) }}",
+        "options": {}
+      },
+      "id": "slack-escalation-alert",
+      "name": "Slack: Escalation Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        620,
+        540
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Slack Bot Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "case-approved",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "webhook-case-approved",
+      "name": "Case Approved",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        700
+      ],
+      "webhookId": "case-approved"
+    },
+    {
+      "parameters": {
+        "fromEmail": "support@example.com",
+        "toEmail": "={{$json.body.requester_email}}",
+        "subject": "Update on your request",
+        "text": "={{$json.body.draft_response}}",
+        "options": {}
+      },
+      "id": "email-approved-ack",
+      "name": "Send Approved Acknowledgement",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        140,
+        700
+      ],
+      "credentials": {
+        "smtp": {
+          "name": "Mailtrap SMTP"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Process Case": {
+      "main": [
+        [
+          {
+            "node": "Route By Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route By Type": {
+      "main": [
+        [
+          {
+            "node": "Send Enquiry Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack: Service Request Routed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Service Request Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack: Complaint Escalated",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack: Escalation Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Case Approved": {
+      "main": [
+        [
+          {
+            "node": "Send Approved Acknowledgement",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "incoming-request-workflow"
+  }
+}

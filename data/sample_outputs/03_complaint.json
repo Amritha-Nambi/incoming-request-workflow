@@ -1,0 +1,22 @@
+{
+    "id": "3D65D3",
+    "received_at": "2026-07-04T11:05:42.909592",
+    "source": "web_form",
+    "requester_email": "kavya.rao@example.com",
+    "type": "complaint",
+    "urgency": "high",
+    "confidence": 0.95,
+    "summary": null,
+    "department": null,
+    "draft_response": "I sincerely apologize for the frustration caused by the frequent dropped calls you have been experiencing recently. We understand how disruptive this is to your daily communication and take your concerns very seriously. Our team is currently looking into the connectivity issues in your area to better understand what may be causing these interruptions.",
+    "sources": null,
+    "actions_taken": [
+        "Escalated to senior handler queue",
+        "Draft acknowledgement generated",
+        "2h SLA reminder set"
+    ],
+    "needs_approval": true,
+    "approved": null,
+    "sla_deadline": "2026-07-04T13:05:42.909517",
+    "status": "awaiting_approval"
+}

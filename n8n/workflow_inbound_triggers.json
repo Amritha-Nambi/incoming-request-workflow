@@ -1,0 +1,106 @@
+{
+  "name": "Incoming Request Workflow - Inbound Triggers",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact Orbit Mobile Support",
+        "formDescription": "Submit a request and our team will get back to you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Your email (optional)",
+              "fieldType": "email",
+              "requiredField": false
+            },
+            {
+              "fieldLabel": "Describe your request",
+              "fieldType": "textarea",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "form-trigger-web",
+      "name": "New Request Form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [-80, 80],
+      "webhookId": "new-request-form"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/process",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "source", "value": "web_form"},
+            {"name": "requester_email", "value": "={{$json['Your email (optional)']}}"},
+            {"name": "request_text", "value": "={{$json['Describe your request']}}"}
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-submit-form",
+      "name": "Submit Form Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [180, 80]
+    },
+    {
+      "parameters": {
+        "mailbox": "INBOX",
+        "options": {}
+      },
+      "id": "imap-inbound-email",
+      "name": "Inbound Support Email",
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2,
+      "position": [-80, 320],
+      "credentials": {
+        "imap": {"name": "Gmail IMAP"}
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/process",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {"name": "source", "value": "email"},
+            {
+              "name": "requester_email",
+              "value": "={{ $json.from.match(/<(.+)>/) ? $json.from.match(/<(.+)>/)[1] : $json.from }}"
+            },
+            {
+              "name": "request_text",
+              "value": "={{ typeof $json.textPlain === 'string' && $json.textPlain.length > 0 ? $json.textPlain : (typeof $json.textHtml === 'string' ? $json.textHtml.replace(/<[^>]*>/g, ' ').trim() : '') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-submit-email",
+      "name": "Submit Email Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [180, 320]
+    }
+  ],
+  "connections": {
+    "New Request Form": {
+      "main": [[{"node": "Submit Form Request", "type": "main", "index": 0}]]
+    },
+    "Inbound Support Email": {
+      "main": [[{"node": "Submit Email Request", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "incoming-request-workflow"
+  }
+}

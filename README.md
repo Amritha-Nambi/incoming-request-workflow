@@ -175,7 +175,7 @@ curl -X POST http://localhost:8000/process \
 
 ## Known limitations
 
-- **Classification is LLM-only** - no second trained classifier (embeddings + logistic regression/XGBoost) is used alongside it, per an intentional scope cut for this POC.
+- **Classification is LLM-only** - no second trained predictive model is used alongside it, per an intentional scope cut for this POC.
 - **SLA deadlines are tracked, not enforced** - `sla_deadline` is stored and surfaced in the Console/Dashboard, but nothing automatically fires a reminder or escalates on breach (no n8n Wait node).
 - **Gemini free-tier rate limits** - the free tier caps at 15 requests/minute for `gemini-3.1-flash-lite`; heavy demo traffic can hit `429` errors.
 - **Local-time display uses a fixed UTC+10 offset** rather than true browser timezone detection, since Streamlit can't read that server-side.

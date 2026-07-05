@@ -11,7 +11,6 @@ from formatting import format_local
 load_dotenv()
 
 API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:8000")
-SOURCES = ["email", "web_form", "shared_inbox"]
 
 URGENCY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3}
 STATUS_ORDER = {"awaiting_approval": 0, "pending": 1, "resolved": 2, "rejected": 3}
@@ -165,50 +164,36 @@ tab_submit, tab_cases = st.tabs(["Submit Request", "Cases"])
 with tab_submit:
     st.subheader("Submit a new request")
 
-    # Outside the form: st.form only reruns on submit, so a mode toggle
-    # inside it wouldn't immediately swap the text/file input widget.
-    input_mode = st.radio("Input method", ["Paste text", "Upload file"], horizontal=True)
-
     with st.form("submit_request", clear_on_submit=True):
-        col1, col2 = st.columns(2)
-        with col1:
-            source = st.selectbox("Source", SOURCES)
-        with col2:
-            email_help = (
-                "Leave blank to auto-detect from the uploaded file's content"
-                if input_mode == "Upload file" else None
-            )
-            requester_email = st.text_input("Requester email (optional)", help=email_help)
-
-        request_text = None
-        uploaded_file = None
-        if input_mode == "Paste text":
-            request_text = st.text_area("Request text", height=120)
-        else:
-            uploaded_file = st.file_uploader("Upload file", type=["txt", "eml", "pdf", "docx"])
+        uploaded_file = st.file_uploader(
+            "Upload file", type=["txt", "eml", "pdf", "docx"],
+            help="Requester email is auto-detected from the file's content.",
+        )
 
         submitted = st.form_submit_button("Submit for classification")
         if submitted:
-            if not request_text and not uploaded_file:
-                st.error("Provide request text or a file.")
+            if not uploaded_file:
+                st.error("Provide a file.")
             else:
-                data = {"source": source, "requester_email": requester_email}
-                files = None
-                if uploaded_file is not None:
-                    files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
-                else:
-                    data["request_text"] = request_text
+                data = {"source": "console"}
+                files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
                 try:
                     resp = requests.post(f"{API_BASE_URL}/process", data=data, files=files, timeout=60)
                     resp.raise_for_status()
                     result = resp.json()
-                    st.success(
-                        f"Case {result['id']} classified as **{result['type']}** "
-                        f"(urgency: {result['urgency']})"
+                    st.success(f"Submitted. Your reference case number is **{result['id']}**.")
+                    st.write(
+                        f"Classified as **{result['type']}** (urgency: {result['urgency']})"
                     )
                     st.cache_data.clear()
                 except requests.RequestException as e:
-                    st.error(f"Submission failed: {e}")
+                    detail = None
+                    if e.response is not None:
+                        try:
+                            detail = e.response.json().get("detail")
+                        except ValueError:
+                            pass
+                    st.error(f"Submission failed: {detail or e}")
 
 with tab_cases:
     try:

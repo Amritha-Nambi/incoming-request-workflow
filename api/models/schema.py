@@ -6,7 +6,7 @@ class ProcessResponse(BaseModel):
     id: str
     received_at: str
     source: str
-    requester_email: Optional[str] = None
+    requester_email: str
     type: str
     urgency: str
     confidence: float

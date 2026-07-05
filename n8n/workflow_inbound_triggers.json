@@ -8,9 +8,9 @@
         "formFields": {
           "values": [
             {
-              "fieldLabel": "Your email (optional)",
+              "fieldLabel": "Your email",
               "fieldType": "email",
-              "requiredField": false
+              "requiredField": true
             },
             {
               "fieldLabel": "Describe your request",
@@ -37,7 +37,7 @@
         "bodyParameters": {
           "parameters": [
             {"name": "source", "value": "web_form"},
-            {"name": "requester_email", "value": "={{$json['Your email (optional)']}}"},
+            {"name": "requester_email", "value": "={{$json['Your email']}}"},
             {"name": "request_text", "value": "={{$json['Describe your request']}}"}
           ]
         },
@@ -48,6 +48,19 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [180, 80]
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "Request received",
+        "completionMessage": "={{ \"Your reference case number is \" + $json.id + \". We'll be in touch.\" }}",
+        "options": {}
+      },
+      "id": "form-completion-web",
+      "name": "Show Case Reference",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [420, 80]
     },
     {
       "parameters": {
@@ -94,6 +107,9 @@
   "connections": {
     "New Request Form": {
       "main": [[{"node": "Submit Form Request", "type": "main", "index": 0}]]
+    },
+    "Submit Form Request": {
+      "main": [[{"node": "Show Case Reference", "type": "main", "index": 0}]]
     },
     "Inbound Support Email": {
       "main": [[{"node": "Submit Email Request", "type": "main", "index": 0}]]

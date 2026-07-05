@@ -124,8 +124,8 @@
       "parameters": {
         "fromEmail": "support@example.com",
         "toEmail": "={{$json.body.requester_email}}",
-        "subject": "Re: your enquiry",
-        "text": "={{$json.body.draft_response}}",
+        "subject": "={{ \"Re: your enquiry [Case \" + $json.body.id + \"]\" }}",
+        "text": "={{ \"Reference case number: \" + $json.body.id + \"\\n\\n\" + $json.body.draft_response }}",
         "options": {}
       },
       "id": "email-enquiry-response",
@@ -171,8 +171,8 @@
       "parameters": {
         "fromEmail": "support@example.com",
         "toEmail": "={{$json.body.requester_email}}",
-        "subject": "Your service request has been received",
-        "text": "={{$json.body.draft_response}}",
+        "subject": "={{ \"Your service request has been received [Case \" + $json.body.id + \"]\" }}",
+        "text": "={{ \"Reference case number: \" + $json.body.id + \"\\n\\n\" + $json.body.draft_response }}",
         "options": {}
       },
       "id": "email-service-request-confirmation",
@@ -260,8 +260,8 @@
       "parameters": {
         "fromEmail": "support@example.com",
         "toEmail": "={{$json.body.requester_email}}",
-        "subject": "Update on your request",
-        "text": "={{$json.body.draft_response}}",
+        "subject": "={{ \"Update on your request [Case \" + $json.body.id + \"]\" }}",
+        "text": "={{ \"Reference case number: \" + $json.body.id + \"\\n\\n\" + $json.body.draft_response }}",
         "options": {}
       },
       "id": "email-approved-ack",

@@ -32,7 +32,7 @@ def init_db():
             id TEXT PRIMARY KEY,
             received_at TEXT NOT NULL,
             source TEXT NOT NULL,
-            requester_email TEXT,
+            requester_email TEXT NOT NULL,
             request_text TEXT NOT NULL,
             type TEXT NOT NULL,
             urgency TEXT NOT NULL,
@@ -97,10 +97,14 @@ def get_case(case_id: str) -> dict | None:
 
 
 def update_approval(case_id: str, approved: bool):
-    status = "resolved" if approved else "rejected"
+    status = "pending" if approved else "rejected"
+    case = get_case(case_id)
+    actions = (case["actions_taken"] if case else []) + (
+        ["Approved and acknowledgement sent"] if approved else ["Rejected by reviewer"]
+    )
     _get_client().execute(
-        "UPDATE cases SET approved = ?, needs_approval = 0, status = ? WHERE id = ?",
-        [int(approved), status, case_id],
+        "UPDATE cases SET approved = ?, needs_approval = 0, status = ?, actions_taken = ? WHERE id = ?",
+        [int(approved), status, json.dumps(actions), case_id],
     )
 
 

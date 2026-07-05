@@ -25,16 +25,25 @@ async def process_request(
 ):
     if request_text is not None and request_text.strip().lower() in ("", "undefined", "null"):
         request_text = None
+    if requester_email is not None and requester_email.strip().lower() in ("", "undefined", "null"):
+        requester_email = None
 
     if file is not None:
         text = await extract_text(file)
-        if not requester_email:
-            found = EMAIL_PATTERN.search(text)
-            requester_email = found.group(0) if found else None
     elif request_text:
         text = request_text
     else:
         raise HTTPException(400, "Provide request_text or a file")
+
+    if not requester_email:
+        found = EMAIL_PATTERN.search(text)
+        requester_email = found.group(0) if found else None
+
+    if not requester_email:
+        raise HTTPException(
+            400,
+            "requester_email is required - provide it directly or ensure it appears in the request text/file",
+        )
 
     classification = classify_request(text)
     branch_output = generate_branch_output(text, classification)

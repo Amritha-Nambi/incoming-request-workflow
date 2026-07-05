@@ -2,7 +2,7 @@
 
 An AI prototype that receives incoming operational requests for a telecom operator ("Orbit Mobile"), classifies them by **type** and **urgency**, and runs a distinct multi-step remediation workflow for each type - routing, drafting responses, logging, SLA tracking, and human-in-the-loop approval where needed.
 
-Built as a 5-day STEM POC. Scope is deliberately narrow: get four request types working reliably end-to-end (classification -> automated actions -> delivery -> visibility) rather than building every feature in the original technical design.
+Built as a 5-day STEM POC. Scope is deliberately narrow: get four request types working reliably end-to-end (classification -> automated actions -> delivery -> visibility).
 
 ## Overview
 
@@ -34,7 +34,7 @@ Streamlit Console   --> GET/POST /console/*  --> case queue, human approval, edi
 Streamlit Dashboard --> GET /console/cases   --> volume/status/SLA/confidence charts
 ```
 
-**Why this split:** FastAPI owns all reasoning (classification, RAG, branch logic) and is the single source of truth (Turso/libSQL). n8n owns only integration/orchestration (webhook triggers, Slack, email). If n8n breaks, the reasoning and data layer are unaffected - only delivery pauses.
+**Why this split:** FastAPI owns all reasoning (classification, RAG, branch logic) and is the single source of truth (Turso/libSQL). n8n owns only orchestration (webhook triggers, Slack, email). If n8n breaks, the reasoning and data layer are unaffected and only delivery pauses.
 
 ## The 4 branches
 
@@ -42,8 +42,8 @@ Streamlit Dashboard --> GET /console/cases   --> volume/status/SLA/confidence ch
 |---|---|---|---|
 | **Enquiry** | Low | RAG-grounded answer (ChromaDB knowledge base) generated and emailed automatically; logged resolved | No |
 | **Service Request** | Medium | Summarized, routed to one of 5 departments (Billing, Technical Support, SIM & Number Porting, Plan Changes, Network Operations) via a dedicated Slack channel; confirmation emailed; 4h SLA timer set | No |
-| **Complaint** | High | Escalated to `#complaints-queue` in Slack; empathetic acknowledgement drafted; 2h SLA reminder set | **Yes** - held until a human approves in the Console (draft is editable before sending) |
-| **Escalation** | Critical | Flagged to `#escalations-queue` in Slack for immediate human attention; urgent acknowledgement drafted; no automated resolution promised | **Yes** - same approval gate as Complaint |
+| **Complaint** | High | Escalated to `#complaints-queue` channel in Slack; empathetic acknowledgement drafted; 2h SLA reminder set | **Yes** - held until a human approves in the Console (draft is editable before sending) |
+| **Escalation** | Critical | Flagged to `#escalations-queue` channel in Slack for immediate human attention; urgent acknowledgement drafted; no automated resolution  | **Yes** - same approval gate as Complaint |
 
 Classification uses a single LLM call (Gemini `gemini-3.1-flash-lite`) returning structured JSON: `{type, urgency, confidence}`. Department selection for Service Request is also LLM-driven but constrained to a fixed enum (validated server-side with a fallback), so Slack routing is deterministic.
 
@@ -148,7 +148,7 @@ Then in the n8n UI (http://localhost:5678):
 
 | Endpoint | Method | Purpose |
 |---|---|---|
-| `/process` | POST | Submit a request (`source`, `request_text` **or** `file`, optional `requester_email`) - classifies, runs branch logic, persists, triggers delivery |
+| `/process` | POST | Submit a request (`source`, `request_text` **or** `file`,  `requester_email`) - classifies, runs branch logic, persists, triggers delivery |
 | `/console/cases` | GET | List all cases |
 | `/console/cases/{id}` | GET | Get one case |
 | `/console/cases/{id}/approve` | POST | Approve/reject a pending case; accepts an optional `edited_draft` to override the AI-drafted acknowledgement before it's sent |
@@ -176,7 +176,6 @@ curl -X POST http://localhost:8000/process \
 ## Known limitations
 
 - **Classification is LLM-only** - no second trained classifier (embeddings + logistic regression/XGBoost) is used alongside it, per an intentional scope cut for this POC.
-- **No response self-check pass** - drafts go straight from generation to the approval queue (for complaint/escalation) or straight out (enquiry/service_request) with no automated rubric review.
 - **SLA deadlines are tracked, not enforced** - `sla_deadline` is stored and surfaced in the Console/Dashboard, but nothing automatically fires a reminder or escalates on breach (no n8n Wait node).
 - **Gemini free-tier rate limits** - the free tier caps at 15 requests/minute for `gemini-3.1-flash-lite`; heavy demo traffic can hit `429` errors.
 - **Local-time display uses a fixed UTC+10 offset** rather than true browser timezone detection, since Streamlit can't read that server-side.

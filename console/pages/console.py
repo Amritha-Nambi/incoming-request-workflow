@@ -205,14 +205,15 @@ with tab_cases:
     if not cases:
         st.caption("No requests processed yet.")
     else:
+        today = datetime.now().date()
         received_dates = [datetime.fromisoformat(c["received_at"]).date() for c in cases]
-        min_date, max_date = min(received_dates), max(received_dates)
+        min_date, max_date = min(min(received_dates), today), max(max(received_dates), today)
 
         st.markdown("**Filters**")
-        col1, col2, col3 = st.columns([2, 1, 1])
+        col1, col2, col3, col4 = st.columns([2, 1, 1, 1.5])
         with col1:
             date_range = st.date_input(
-                "Received date range", value=(min_date, max_date),
+                "Received date range", value=(today, today),
                 min_value=min_date, max_value=max_date,
             )
         with col2:
@@ -225,13 +226,16 @@ with tab_cases:
                 {c["urgency"] for c in cases}, key=lambda u: URGENCY_ORDER.get(u, 99)
             )
             urgency_filter = st.multiselect("Urgency", urgency_options, default=urgency_options)
+        with col4:
+            search_query = st.text_input("Search by Case ID", placeholder="e.g. CASE-1234")
 
-        start_date, end_date = (date_range if len(date_range) == 2 else (min_date, max_date))
+        start_date, end_date = (date_range if len(date_range) == 2 else (today, today))
         filtered = [
             c for c in cases
             if start_date <= datetime.fromisoformat(c["received_at"]).date() <= end_date
             and c["status"] in status_filter
             and c["urgency"] in urgency_filter
+            and (not search_query or search_query.strip().lower() in c["id"].lower())
         ]
 
         # newest-first within each status/urgency group (stable sort: sort by
@@ -242,19 +246,25 @@ with tab_cases:
             key=lambda c: (STATUS_ORDER.get(c["status"], 99), URGENCY_ORDER.get(c["urgency"], 99)),
         )
 
-        st.subheader(f"Cases ({len(filtered)} of {len(cases)})")
-        if not filtered:
-            st.caption("No cases match the current filters.")
-        else:
-            def id_label(c: dict) -> str:
-                is_open = c["status"] not in ("resolved", "rejected")
-                icons = ""
-                if is_open and "Flagged for immediate human attention" in c["actions_taken"]:
-                    icons += "🚨 "
-                if is_open and c.get("sla_deadline"):
-                    icons += "⏱ "
-                return f"{icons}{c['id']}" if icons else c["id"]
+        header_col, reload_col = st.columns([10, 1])
+        with header_col:
+            st.subheader(f"Cases ({len(filtered)} of {len(cases)})")
+        with reload_col:
+            if st.button("↻", help="Reload cases (fetches any new requests)", key="reload_cases"):
+                st.cache_data.clear()
+                st.rerun()
 
+        def id_label(c: dict) -> str:
+            is_open = c["status"] not in ("resolved", "rejected")
+            icons = ""
+            if is_open and "Flagged for immediate human attention" in c["actions_taken"]:
+                icons += "🚨 "
+            if is_open and c.get("sla_deadline"):
+                icons += "⏱ "
+            return f"{icons}{c['id']}" if icons else c["id"]
+
+        columns = ["ID", "Received", "Type", "Urgency", "Status"]
+        if filtered:
             table = pd.DataFrame(
                 [
                     {
@@ -267,14 +277,20 @@ with tab_cases:
                     for c in filtered
                 ]
             )
-            event = st.dataframe(
-                table,
-                hide_index=True,
-                width="stretch",
-                on_select="rerun",
-                selection_mode="single-row",
-            )
+        else:
+            table = pd.DataFrame(columns=columns)
 
+        event = st.dataframe(
+            table,
+            hide_index=True,
+            width="stretch",
+            on_select="rerun",
+            selection_mode="single-row",
+        )
+
+        if not filtered:
+            st.caption("No matches found.")
+        else:
             selected_rows = event.selection["rows"] if event and event.selection else []
             if selected_rows:
                 st.divider()

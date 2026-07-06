@@ -26,6 +26,9 @@ def _draft_json(prompt: str) -> dict:
 
 
 def generate_branch_output(text: str, classification: dict) -> dict:
+    # each request type gets handled differently: enquiries are answered straight
+    # away from the knowledge base, service requests get routed and confirmed,
+    # complaints and escalations only get a drafted response that a human has to approve
     req_type = classification["type"]
 
     if req_type == "enquiry":
@@ -74,6 +77,8 @@ def generate_branch_output(text: str, classification: dict) -> dict:
         summary = draft["summary"]
         department = draft["department"]
         if department not in DEPARTMENTS:
+            # model sometimes drifts from the exact department strings we asked for,
+            # so fall back to a safe default rather than routing to a bad value
             department = "Technical Support"
         confirmation = draft["confirmation"]
         return {

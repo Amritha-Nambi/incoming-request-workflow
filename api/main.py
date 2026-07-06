@@ -10,6 +10,7 @@ from routers import process, console
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # runs once on startup so the cases table exists before any request hits it
     init_db()
     yield
 

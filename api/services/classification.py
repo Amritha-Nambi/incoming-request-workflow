@@ -38,6 +38,8 @@ def classify_request(text: str) -> dict:
         config=types.GenerateContentConfig(response_mime_type="application/json"),
     )
     data = json.loads(response.text.strip())
+    # if the model returns something outside our known values, fall back to the
+    # safest option instead of letting a bad classification break the request
     if data.get("type") not in VALID_TYPES:
         data["type"] = "enquiry"
     if data.get("urgency") not in VALID_URGENCY:

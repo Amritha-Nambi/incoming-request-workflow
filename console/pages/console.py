@@ -207,6 +207,8 @@ with tab_cases:
     else:
         today = datetime.now().date()
         received_dates = [datetime.fromisoformat(c["received_at"]).date() for c in cases]
+        # include today in the range even if no case has come in yet today,
+        # otherwise the date picker won't let you select the current day
         min_date, max_date = min(min(received_dates), today), max(max(received_dates), today)
 
         st.markdown("**Filters**")
@@ -255,6 +257,8 @@ with tab_cases:
                 st.rerun()
 
         def id_label(c: dict) -> str:
+            # flag open cases that need extra attention right in the table,
+            # so reviewers don't have to open every row to spot what's urgent
             is_open = c["status"] not in ("resolved", "rejected")
             icons = ""
             if is_open and "Flagged for immediate human attention" in c["actions_taken"]:

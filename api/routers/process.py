@@ -23,9 +23,19 @@ async def process_request(
     requester_email: str = Form(None),
     file: UploadFile = File(None),
 ):
-    if request_text is not None and request_text.strip().lower() in ("", "undefined", "null"):
+    # some form clients send the literal strings "undefined"/"null" instead of
+    # leaving the field out, so treat those the same as not being provided
+    if request_text is not None and request_text.strip().lower() in (
+        "",
+        "undefined",
+        "null",
+    ):
         request_text = None
-    if requester_email is not None and requester_email.strip().lower() in ("", "undefined", "null"):
+    if requester_email is not None and requester_email.strip().lower() in (
+        "",
+        "undefined",
+        "null",
+    ):
         requester_email = None
 
     if file is not None:
@@ -35,6 +45,8 @@ async def process_request(
     else:
         raise HTTPException(400, "Provide request_text or a file")
 
+    # if the caller didn't pass an email separately, try pulling one out of the
+    # request text itself, ex. an email forwarded as a raw .eml or a web form paste
     if not requester_email:
         found = EMAIL_PATTERN.search(text)
         requester_email = found.group(0) if found else None

@@ -14,6 +14,7 @@ _collection = None
 def _get_collection():
     global _collection
     if _collection is None:
+        # keep one client/collection around instead of reconnecting to chroma on every call
         client = chromadb.PersistentClient(path=PERSIST_DIR)
         _collection = client.get_collection(COLLECTION_NAME, embedding_function=embedding_fn)
     return _collection

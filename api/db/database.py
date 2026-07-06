@@ -2,6 +2,8 @@ import os
 import json
 import libsql_client
 
+# order here has to match the table schema below, since insert_case and the
+# select queries both build their column list off this
 _COLUMNS = [
     "id", "received_at", "source", "requester_email", "request_text", "type",
     "urgency", "confidence", "summary", "department", "draft_response", "sources",
@@ -99,6 +101,8 @@ def get_case(case_id: str) -> dict | None:
 def update_approval(case_id: str, approved: bool):
     status = "pending" if approved else "rejected"
     case = get_case(case_id)
+    # we append to the existing history rather than replace it, so actions_taken
+    # doubles as a simple audit trail of what happened to the case over time
     actions = (case["actions_taken"] if case else []) + (
         ["Approved and acknowledgement sent"] if approved else ["Rejected by reviewer"]
     )

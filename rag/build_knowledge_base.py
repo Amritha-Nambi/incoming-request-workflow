@@ -16,6 +16,8 @@ def build():
         chunks = json.load(f)
 
     client = chromadb.PersistentClient(path=PERSIST_DIR)
+    # drop and rebuild from scratch each run, so re-running this script after
+    # editing faq.json can't leave stale or duplicate chunks behind
     if COLLECTION_NAME in [c.name for c in client.list_collections()]:
         client.delete_collection(COLLECTION_NAME)
     collection = client.create_collection(COLLECTION_NAME, embedding_function=embedding_fn)

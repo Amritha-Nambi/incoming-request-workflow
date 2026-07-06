@@ -28,6 +28,8 @@ def approve_case(case_id: str, body: ApprovalRequest):
     if not case:
         raise HTTPException(404, "Case not found")
 
+    # save any manual edit to the draft first, so the approval webhook below
+    # sends out the reviewer's version rather than the original AI draft
     if body.edited_draft is not None and body.edited_draft != case.get("draft_response"):
         update_draft_response(case_id, body.edited_draft)
         case["draft_response"] = body.edited_draft

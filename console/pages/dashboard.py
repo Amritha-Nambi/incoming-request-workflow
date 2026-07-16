@@ -7,7 +7,7 @@ import requests
 import streamlit as st
 from dotenv import load_dotenv
 
-from formatting import format_local
+from formatting import format_local, to_local_date
 
 load_dotenv()
 
@@ -76,8 +76,7 @@ if not cases:
     st.stop()
 
 df = pd.DataFrame(cases)
-df["received_at_dt"] = pd.to_datetime(df["received_at"])
-df["received_date"] = df["received_at_dt"].dt.date
+df["received_date"] = df["received_at"].apply(to_local_date)
 
 now = datetime.utcnow()
 
@@ -198,7 +197,7 @@ else:
     st.dataframe(display_df, hide_index=True, width="stretch")
 
 with st.expander("View raw case data"):
-    raw_df = df.drop(columns=["received_at_dt", "overdue"]).copy()
+    raw_df = df.drop(columns=["overdue"]).copy()
     raw_df["received_at"] = raw_df["received_at"].apply(format_local)
     raw_df["sla_deadline"] = raw_df["sla_deadline"].apply(
         lambda v: format_local(v) if pd.notna(v) else "-"

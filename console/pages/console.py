@@ -1,12 +1,11 @@
 import os
-from datetime import datetime
 
 import pandas as pd
 import requests
 import streamlit as st
 from dotenv import load_dotenv
 
-from formatting import format_local
+from formatting import format_local, to_local_date, today_local
 
 load_dotenv()
 
@@ -205,8 +204,8 @@ with tab_cases:
     if not cases:
         st.caption("No requests processed yet.")
     else:
-        today = datetime.now().date()
-        received_dates = [datetime.fromisoformat(c["received_at"]).date() for c in cases]
+        today = today_local()
+        received_dates = [to_local_date(c["received_at"]) for c in cases]
         # include today in the range even if no case has come in yet today,
         # otherwise the date picker won't let you select the current day
         min_date, max_date = min(min(received_dates), today), max(max(received_dates), today)
@@ -234,7 +233,7 @@ with tab_cases:
         start_date, end_date = (date_range if len(date_range) == 2 else (today, today))
         filtered = [
             c for c in cases
-            if start_date <= datetime.fromisoformat(c["received_at"]).date() <= end_date
+            if start_date <= to_local_date(c["received_at"]) <= end_date
             and c["status"] in status_filter
             and c["urgency"] in urgency_filter
             and (not search_query or search_query.strip().lower() in c["id"].lower())
